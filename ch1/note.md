@@ -1,6 +1,6 @@
-# Building Abstractions with Procedures
+# 1 Building Abstractions with Procedures
 
-## The Elements of Programming
+## 1.1 The Elements of Programming
 
 > A powerful programming language is more than just a means for instructing a computer ot perform tasks. The language also serves as a framework within which we organize our ideas about processes.
 
@@ -9,7 +9,7 @@
 - 组合：将简单元素组合成合成元素
 - 抽象：将合成元素命名并作为单元进行操作
 
-### Expressions
+### 1.1.1 Expressions
 
 ```scheme
 1 ]=> (+ 2.7 10)
@@ -17,14 +17,14 @@
 ```
 一对**小括号**即为上述的**组合**。一个元素的操作符永远在最左侧，且这个元素的边界以小括号决定（所以可以一次操作多个参数，不止二元操作）（😯看起来很像函数耶）
 
-### Naming and the Environment
+### 1.1.2 Naming and the Environment
 
 ```scheme
 (define size 2)
 ```
 **define** 是 scheme 中最简单的一种**抽象**（注意 define 不是组合，因为它不是在求值，而是把一个元素进行命名）
 
-### Evaluating Combinations
+### 1.1.3 Evaluating Combinations
 
 给组合求值的过程如下：
 1. 给组合的子表达式求值
@@ -34,7 +34,7 @@
 
 **tree accumulation**：自底向上给树状对象求值
 
-### Compound Procedures
+### 1.1.4 Compound Procedures
 
 **procedure definition**：也是一种抽象，把一系列的复杂操作组合起来并命名
 
@@ -44,7 +44,7 @@
 ;Value: 441
 ```
 
-### The Substitution Model for Procedure Application
+### 1.1.5 The Substitution Model for Procedure Application
 
 **substitution model**（替换模型）：
 
@@ -73,7 +73,7 @@
 (+ (* 6 6) (* 10 10))
 ```
 
-### Conditional Expressions and Predicates
+### 1.1.6 Conditional Expressions and Predicates
 
 **case analysis**
 
@@ -110,7 +110,7 @@
   (or (> x y) (= x y)))
 ```
 
-### Example: Square Roots by Newton's Method
+### 1.1.7 Example: Square Roots by Newton's Method
 
 > In mathematics we are usually concerned with declarative (what is) descriptions, whereas in computer science we are usually concerned with imperative (how to) descriptions.
 
@@ -134,7 +134,7 @@
 
 哇哦，没有循环，而是 procedure 之间的互相调用
 
-### Procedures as Black-Box Abstractions
+### 1.1.8 Procedures as Black-Box Abstractions
 
 黑箱抽象
 
@@ -173,4 +173,72 @@
         guess
         (sqrt-iter (improve guess))))
   (sqrt-iter 1.0))
+```
+
+## 1.2 Procedures and the Processes They Generate
+
+### 1.2.1 Liner Recursion and Iteration
+
+- **recursive process**：递归过程。特征是一系列的延迟操作
+- **linear recursive process**：线性递归，递归栈的规模随 n 线性增长
+
+- **iterative process**：迭代过程
+- **linear iterative process**
+
+每次迭代都提供了足够的参数描述当前状态，所以可以中止可以通过记录参数保存当前状态；但递归有一些隐含的信息（在解释器中，而不是在程序的变量中）
+
+递归和迭代的本质区别在于实际运行时是如何运行的，而不是语法上调用了自身就是递归。但是很多语言的实现中都是把语法递归直接处理成递归栈...但是 Scheme 会把语法递归但实际迭代的程序处理成常数空间的正常迭代（可以通过尾递归优化来实现，尾递归这种写法本质上就是个语法糖，告诉解释器去按迭代处理）
+
+```scheme
+;一个语法上是递归但实际运行是迭代的栗子
+;因为每次我们都给 fact-iter 提供了足够的参数表示状态，它不依赖上下的结果，这些参数也是用完这次就可以扔了
+(define (factorial n)
+  (fact-iter 1 1 n))
+(define (fact-iter product counter max-count)
+  (if (> counter max-count)
+      product
+      (fact-iter (* counter product)
+                 (+ counter 1)
+                 max-count)))
+```
+
+### 1.2.2 Tree Recursion
+
+规模随 n 指数增长（2^n）
+
+### 1.2.3 Orders of Growth
+
+复杂度计算
+
+### 1.2.4 Exponentiation
+
+直觉的幂运算
+
+```scheme
+;递归版本，空间和时间复杂度都为 o(n)
+(define (expt b n)
+  (if (= n 0)
+      1
+      (* b (expt b (- n 1)))))
+;迭代版本，空间复杂度降为 o(1)
+(define (expt b n)
+  (expt-iter b n 1))
+(define (expt-iter b counter product)
+  (if (= counter 0)
+      product
+      (expt-iter b
+                 (- counter 1)
+                 (* b product))))
+```
+
+改进：**successive squaring**（b^8 = b^4 * b^4）
+
+```scheme
+;时间和空间复杂度都降为 o(lgn)
+(define (fast-expt b n)
+  (cond ((= n 0) 1)
+        ((even? n)
+         (square (fast-expt b (/ n 2))))
+        (else
+         (* b (fast-expt b (- n 1))))))
 ```
