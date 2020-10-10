@@ -242,3 +242,75 @@
         (else
          (* b (fast-expt b (- n 1))))))
 ```
+
+### 1.2.5 Greatest Common Divisors
+
+最大公约数GCD 欧几里得算法（o(lgn)）
+
+```scheme
+(define (gcd a b)
+  (if (= b 0)
+      a
+      (gcd b (remainder a b))))
+```
+
+### 1.2.6 Example: Testing for Primality
+
+检查一个数是否为质数
+
+方法1：找出 n 的约数，复杂度为 o(n^(1/2))
+
+```scheme
+(define (smallest-divisor n) ;find the smallest divisor of n
+  (find-divisor n 2))
+(define (find-divisor n test-divisor)
+  (cond ((> (square test-divisor) n)
+         n)
+        ((divides? test-divisor n)
+         test-divisor)
+        (else (find-divisor
+               n
+               (+ test-divisor 1)))))
+(define (divides? a b) ;b能否整除a
+  (= (remainder b a) 0))
+
+(define (prime? n)
+  (= n (smallest-divisor n)))
+```
+
+方法2：The Fermat test，复杂度为 o(lgn)
+
+基于费马小定理...
+
+> 如果 n 是素数且 a 是任意小于 n 的正整数，则 a^n 与 a 模 n 同余。
+
+采用以下算法：对于一个 n，随机选取一个 a < n 并计算 a^n 模 n 的余数，如果这个余数不等于 a（即 a 模 n 的余数就是 a 本身），那么这个数不是质数，否则继续测试...
+
+这是个**概率算法**，概率算法存在的意义在于它可以由人控制错误概率到任意小
+
+```scheme
+;用了 successive squaring
+;(((a^n) mod m) * a) mod m = (a^(n+1)) mod m
+;((a^n) mod m)^2 mod m = (a^(2n)) mod m
+(define (expmod base exp m) ;calculate (base^exp) mod m
+  (cond ((= exp 0) 1)
+        ((even? exp)
+         (remainder
+          (square (expmod base (/ exp 2) m))
+          m))
+        (else
+         (remainder
+          (* base (expmod base (- exp 1) m))
+          m))))
+
+(define (fermat-test n)
+  (define (try-it a)
+    (= (expmod a n n) a))
+  (try-it (+ 1 (random (- n 1)))))
+
+(define (fast-prime? n times)
+  (cond ((= times 0) true)
+        ((fermat-test n)
+         (fast-prime? n (- times 1)))
+        (else false)))
+```
