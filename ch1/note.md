@@ -316,3 +316,47 @@ Carmichael 数：可以通过费马测试的合数
          (fast-prime? n (- times 1)))
         (else false)))
 ```
+
+## 1.3 Formulating Abstractions with Higher-Order Procedures
+
+> One of the things we should demand from a powerful programming language is the ability to build abstractions by assigning names to common patterns and then to work in terms of the abstractions directly. Procedures provide this ability. This is why all but the most primitive programming languages include mechanisms for defining procedures.
+
+但只接受数字参数的函数能力有限，而我们希望将函数也作为参数传入函数，这就是高阶函数（higher-order procedure）。
+
+### 1.3.1 Procedures as Arguments
+
+```scheme
+;表示了 (term a) + ... + (term b)，按 next 方式增长 a
+(define (sum term a next b) ;term next为函数
+  (if (> a b)
+      0
+      (+ (term a)
+         (sum term (next a) next b))))
+```
+
+### 1.3.2 Constructing Procedures Using Lambda
+
+**lambda** 就像箭头函数，一种比较简便地定义函数的写法
+
+```scheme
+(lambda (x) (+ x 4))
+;直接调用
+((lambda (x y z) (+ x y (square z))) 1 2 3)
+```
+
+**let** 创建局部变量，这样就不用额外 define/lambda 一堆局部值了
+
+```scheme
+(let ((<var1> <exp1>)
+      (<var2> <exp2>)
+      ...
+      (<varn> <expn>))
+  <body>) ;定义这堆局部变量在body中
+
+;其实就是下面的lambda表达式的语法糖
+((lambda (<var1> ... <varn>)
+         <body>)
+  <exp1>
+  ...
+  <expn>)
+```
