@@ -288,6 +288,8 @@
 
 这是个**概率算法**，概率算法存在的意义在于它可以由人控制错误概率到任意小
 
+Carmichael 数：可以通过费马测试的合数
+
 ```scheme
 ;用了 successive squaring
 ;(((a^n) mod m) * a) mod m = (a^(n+1)) mod m
