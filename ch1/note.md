@@ -360,3 +360,60 @@ Carmichael 数：可以通过费马测试的合数
   ...
   <expn>)
 ```
+
+```scheme
+;注意 let 定义的变量的作用域仅限于后面跟着的 body 中
+;so the variables' values are computed outside the let
+;if the value of x is 2
+(let ((x 3)
+      (y (+ x 2))) ;y=4（x=3 仅限于后面的 body 部分，这里的 x 是外面作用域的2）
+  (* x y)) ;3*4=12
+```
+
+### 1.3.3 Procedures as General Methods
+
+half-interval 法求方程式的根：给定 f a b，f(a)与f(b)的值一正一负，然后取中点...
+
+```scheme
+(define (search f neg-point pos-point)
+  (let ((midpoint
+        (average neg-point pos-point)))
+    (if (close-enough? neg-point pos-point)
+        midpoint
+        (let ((test-value (f midpoint))
+          (cond
+            ((positive? test-value)
+             (search f neg-point midpoint))
+            ((negative? test-value)
+             (search f midpoint pos-point))
+            (else midpoint)))))))
+(define (half-interval-method f a b)
+  (let ((a-value (f a))
+        (b-value (f b)))
+    (cond ((and (negative? a-value)
+                (positive? b-value))
+           (search f a b))
+          ((and (negative? b-value)
+                (positive? a-value))
+           (search f b a))
+          (else
+           (error "Values are not of opposite sign" a b)))))
+```
+
+寻找函数的 fixed point（满足 f(x)=x 的 x 值）：最初随便猜个值，然后 f(x), f(f(x)), f(f(f(x)))...直到值不变
+
+```scheme
+(define tolerance 0.00001)
+(define (fixed-point f first-guess)
+  (define (close-enough? v1 v2)
+    (< (abs (- v1 v2))
+       tolerance))
+  (define (try guess)
+    (let ((next (f guess)))
+      (if (close-enough? guess next)
+          next
+          (try next))))
+  (try first-guess))
+```
+
+**average damping**：比如 f(y)=x/y，如果直接套会无限重复，对原始公式变形为 y=(y+x/y)/2 就可以解决这个问题，这种技巧称作平均阻尼。
