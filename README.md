@@ -10,3 +10,7 @@
 - [SICP解题集](https://sicp.readthedocs.io/en/latest/)
 - [SICP - Solution](https://codology.net/)
 - [How to install MIT Scheme on Mac?](https://stackoverflow.com/questions/12322434/how-to-install-mit-scheme-on-mac/31601331#31601331)
+
+## 笔记
+
+[1 Building Abstractions with Procedures](./ch1/note.md)

@@ -417,3 +417,56 @@ half-interval 法求方程式的根：给定 f a b，f(a)与f(b)的值一正一�
 ```
 
 **average damping**：比如 f(y)=x/y，如果直接套会无限重复，对原始公式变形为 y=(y+x/y)/2 就可以解决这个问题，这种技巧称作平均阻尼。
+
+### 1.3.4 Procedures as Returned Values
+
+我们可以把上面描述的 average damping 过程描述成代码
+
+```scheme
+(define (average-damp f)
+  (lambda (x)
+    (average x (f x)))) ;哦！函数也可以作为返回值！
+```
+
+用上这个，我们来重构一下 sqrt
+
+```scheme
+;y^2=x，也就是求 y=x/y 的 fixed point
+(define (sqrt x)
+  (fixed-point
+    (average-damp
+      (lambda (y) (/ x y)))
+    1.0))
+```
+
+Newton's method...（公式略
+
+```scheme
+;derivative（求导）
+(define dx 0.00001)
+(define (deriv g)
+  (lambda (x)
+    (/ (- (g (+ x dx)) (g x))
+       dx)))
+;Newton's method
+(define (newton-transform g)
+  (lambda (x))
+    (- x (/ (g x)
+            ((deriv g) x))))
+(define (newtons-method g guess)
+  (fixed-point (newton-transform g)
+               guess))
+;so another form of sqrt...
+(define (sqrt x)
+  (newtons-method
+    (lambda (y)
+      (- (square y) x))
+    1.0))
+```
+
+umm，进一步抽象，都是把函数转换成另一个函数，然后求它的 fixed point，模式如下
+
+```scheme
+(define (fixed-point-of-transform g transform guess)
+  (fixed-point (transform g) guess))
+```
