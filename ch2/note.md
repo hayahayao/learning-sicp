@@ -61,3 +61,47 @@ cons 把两个参数组合成一个新的 data object，称作 pair，可以通�
 > In general, the underlying idea of data abstraction is to identify for each type of data object a basic set of operations in terms of which all manipulations of data objects of that type will be expressed, and then to use only those operations in manipulating the data.
 
 嗯，就是把数据和操作封装起来的意思，之后就只通过接口去操作数据..从而可以形成分层的抽象，层与层之间通过接口沟通...设计的时候要考虑哪个操作放在哪一层，分的不好的话就会造成改动/debug都比较费劲..
+
+### 2.1.3 What Is Meant by Data?
+
+> In general, we can think of data as defined by some collection of selectors and constructors, together with specified conditions that these procedures must fulfill in order to be a valid representation.
+
+```scheme
+;our own cons
+(define (cons x y)
+  (define (dispatch m)
+    (cond ((= m 0) x)
+          ((= m 1) y)
+          (else (error "Argument not 0 or 1: CONS" m))))
+  dispatch) ;注意，cons返回的是个函数
+(define (car z) (z 0))
+(define (cdr z) (z 1))
+```
+
+当然，Lisp 实际不是这样运行 cons 的（出于效率考虑，Lisp 直接实现，更加高效），但是我们看到 it could work this way，从而说明*将函数视作对象的能力自动提供了表示组合数据的能力（the ability to manipulate procedures as objects automatically provides the ability to represent compound data）*。
+
+### 2.1.4 Extended Exercise: Interval Arithmetic
+
+```scheme
+(define (add-interval x y)
+  (make-interval (+ (lower-bound x)
+                    (lower-bound y))
+                 (+ (upper-bound x)
+                    (upper-bound y))))
+(define (mul-interval x y)
+  (let ((p1 (* (lower-bound x)
+               (lower-bound y)))
+        (p2 (* (lower-bound x)
+               (upper-bound y)))
+        (p3 (* (upper-bound x)
+               (lower-bound y)))
+        (p4 (* (upper-bound x)
+               (upper-bound y))))
+    (make-interval (min p1 p2 p3 p4)
+                   (max p1 p2 p3 p4))))
+(define (div-interval x y)
+  (mul-interval x
+                (make-interval
+                 (/ 1.0 (upper-bound y))
+                 (/ 1.0 (lower-bound y)))))
+```
