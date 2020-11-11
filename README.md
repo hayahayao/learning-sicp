@@ -14,5 +14,5 @@
 
 ## 笔记
 
-[1 Building Abstractions with Procedures](./ch1/note.md)
-[2 Building Abstractions with Data](./ch2/note.md)
+- [1 Building Abstractions with Procedures](./ch1/note.md)
+- [2 Building Abstractions with Data](./ch2/note.md)

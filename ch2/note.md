@@ -145,3 +145,15 @@ cons 把两个参数组合成一个新的 data object，称作 pair，可以通�
       (cons (car list1)
             (append (cdr list1) list2))))
 ```
+
+we can define operation **map**!
+
+> Map is an important construct, not only because it captures a common pattern, but because it establishes a higher level of abstraction in dealing with lists...Map helps establish an abstraction barrier that isolates the implementation of procedures that transform lists from the details of how the elements of the list are extracted and combined.
+
+```scheme
+(define (map proc items)
+  (if (null? items)
+      nil
+      (cons (proc (car items))
+            (map proc (cdr items)))))
+```
