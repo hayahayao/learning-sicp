@@ -105,3 +105,43 @@ cons 把两个参数组合成一个新的 data object，称作 pair，可以通�
                  (/ 1.0 (upper-bound y))
                  (/ 1.0 (lower-bound y)))))
 ```
+
+## 2.2 Hierarchical Data and the Closure Property
+
+**closure property** of cons: the ability to create pairs whose elements are pairs. 
+
+普遍而言，当一个结合数据的操作的返回结果又可以被这个操作本身继续结合，我们就说操作具有 closure property。有了 closure 我们就能够创造多层结构（hierarchical structures）。
+
+### 2.2.1 Representing Sequences
+
+**sequence**: an ordered collection of data objects
+
+```scheme
+;一个直观的表示方法（就是链表）
+(cons 1
+  (cons 2
+    (cons 3
+      (cons 4 nil))))
+;这种方法等效的语法表示
+(list 1 2 3 4)
+;对应的 selector
+(define one-through-four (list 1 2 3 4))
+(car one-through-four) ;1
+(cdr one-through-four) ;(2,3,4)
+(car (cdr one-through-four)) ;2
+(cons 10 one-through-four) ;(10 1 2 3 4)
+;我们可以再定义一些 operation
+(define (list-ref items n)
+  (if (= n 0)
+      (car items)
+      (list-ref (cdr items) (- n 1))))
+(define (length items)
+  (if (null? items)
+      0
+      (+ 1 (length (cdr items)))))
+(define (append list1 list2)
+  (if (null? list1)
+      list2
+      (cons (car list1)
+            (append (cdr list1) list2))))
+```
