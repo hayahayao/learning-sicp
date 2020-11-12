@@ -157,3 +157,16 @@ we can define operation **map**!
       (cons (proc (car items))
             (map proc (cdr items)))))
 ```
+
+### 2.2.2 Hierarchical Structures
+
+可以把 list 的项也定义成 list，这样就形成了树状结构
+
+```scheme
+;计算树有多少叶子节点
+(define (count-leaves x)
+  (cond ((null? x) 0)
+        ((not (pair? x)) 1)
+        (else (+ (count-leaves (car x))
+                 (count-leaves (cdr x))))))
+```
