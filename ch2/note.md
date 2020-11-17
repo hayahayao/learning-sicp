@@ -158,6 +158,11 @@ we can define operation **map**!
             (map proc (cdr items)))))
 ```
 
+```scheme
+(define (scale-list items factor)
+  (map (lambda (x) (* x factor)) items))
+```
+
 ### 2.2.2 Hierarchical Structures
 
 可以把 list 的项也定义成 list，这样就形成了树状结构
@@ -169,4 +174,25 @@ we can define operation **map**!
         ((not (pair? x)) 1)
         (else (+ (count-leaves (car x))
                  (count-leaves (cdr x))))))
+```
+
+> Just as map is a powerful abstraction for dealing with sequences, map together with recursion is a powerful abstraction for dealing with trees.
+
+```scheme
+;just like scale-list
+(define (scale-tree tree factor)
+  (cond ((null? tree) nil)
+        ((not (pair? tree))
+         (* tree factor))
+        (else
+         (cons (scale-tree (car tree) factor)
+               (scale-tree (cdr tree) factor)))))
+;map version
+;对子树做 map
+(define (scale-tree tree factor)
+  (map (lambda (sub-tree)
+         (if (pair? sub-tree)
+             (scale-tree sub-tree factor)
+             (* sub-tree factor)))
+       tree))
 ```

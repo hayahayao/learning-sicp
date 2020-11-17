@@ -1,0 +1,51 @@
+(define (make-mobile left right)
+  (list left right))
+(define (make-branch length structure)
+  (list length structure))
+
+(define (left-branch mobile)
+  (car mobile))
+(define (right-branch mobile)
+  (car (cdr mobile)))
+(define (branch-length branch)
+  (car branch))
+(define (branch-structure branch)
+  (car (cdr branch)))
+
+;定义辅助函数 mobile => mobile/weight
+(define (left-mobile mobile)
+  (branch-structure (left-branch m)))
+(define (right-mobile mobile)
+  (branch-structure (right-branch m)))
+
+(define (total-weight m)
+  (cond ((null? m) 0)
+        ((not (pair? m)) m)
+        (else (+ (total-weight (left-mobile m))
+                 (total-weight (right-mobile m))))))
+
+(define (balanced? m)
+  (cond ((null? m) #t)
+        ((not (pair? m)) #t)
+        (else
+          (and (= (* (branch-length (left-branch m))
+                     (total-weight (left-mobile m)))
+                  (* (branch-length (right-branch m))
+                     (total-weight (right-monbile m))))
+               (balanced? (left-mobile m))
+               (balanced? (right-mobile m))))))
+
+;如果修改 make-mobile 和 make-branch
+;对应只需要修改四个 selector（准确来说，是负责选第二个的两个 selector）
+(define (make-mobile left right)
+  (cons left right))
+(define (make-branch length structure)
+  (cons length structure))
+(define (left-branch mobile)
+  (car mobile))
+(define (right-branch mobile)
+  (cdr mobile))
+(define (branch-length branch)
+  (car branch))
+(define (branch-structure branch)
+  (cdr branch))
