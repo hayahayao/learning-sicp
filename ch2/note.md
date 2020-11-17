@@ -196,3 +196,28 @@ we can define operation **map**!
              (* sub-tree factor)))
        tree))
 ```
+
+### 2.2.3 Sequences as Conventional Interfaces
+
+把过程抽象成几个步骤（express programs as sequence operations），数据在其中流动...just as signal-flow
+
+> The value of expressing programs as sequence operations is that this helps us make program designs that are **modular**, that is, designs that are constructed by combining relatively independent pieces. We can encourage modular design by providing a library of standard components together with a **conventional interface** for connecting the components in flexible ways.
+
+```scheme
+;一些重要的 component
+(define (filter predicate sequence)
+  (cond ((null? sequence) nil)
+        ((predicate (car sequence))
+         (cons (car sequence)
+               (filter predicate (cdr sequence))))
+        (else (filter predicate (cdr sequence)))))
+(define (accumulate op initial sequence)
+  (newline)
+  (display sequence)
+  (if (null? sequence)
+      initial ;递归到底的时候是 (last, nil) 这种，所以会返回 initial，然后一层层向回传
+      (op (car sequence)
+          (accumulate op initial (cdr sequence)))))
+```
+
+**conventional interfaces**：在本例中指的是 sequence(lists)，这种接口让我们可以把一系列的步骤（modules）连接到一起
