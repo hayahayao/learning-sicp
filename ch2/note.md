@@ -212,8 +212,6 @@ we can define operation **map**!
                (filter predicate (cdr sequence))))
         (else (filter predicate (cdr sequence)))))
 (define (accumulate op initial sequence)
-  (newline)
-  (display sequence)
   (if (null? sequence)
       initial ;递归到底的时候是 (last, nil) 这种，所以会返回 initial，然后一层层向回传
       (op (car sequence)
