@@ -218,4 +218,38 @@ we can define operation **map**!
           (accumulate op initial (cdr sequence)))))
 ```
 
-**conventional interfaces**：在本例中指的是 sequence(lists)，这种接口让我们可以把一系列的步骤（modules）连接到一起
+**conventional interfaces**：在本例中指的是 sequence(lists)，这种接口让我们可以把一系列的步骤（modules）连接到一起。把 accumulate filter map...组合起来可以解决很多问题，中间通过 conventional interfaces 连接，普遍的范式一般这样：
+
+```scheme
+(define
+  (product-of-squares-of-odd-elements sequence)
+  (accumulate
+   *
+   1
+   (map square (filter odd? sequence))))
+;从语义上也很好理解
+;filter 把 sequence 中的奇数筛出来
+;map 对这些奇数做平方
+;accumulate 将这些平方加起来
+```
+
+这种 sequence 范式可以用于解决很多用嵌套循环表达的问题，例如：
+
+> 给定 n，找出所有的数对 `(i,j)`，满足 `1<=j<i<=n` 且 `i+j` 是素数
+>
+> 可以这样分析，对于每个 `i<=n`，我们枚举出所有的 `j<i`，然后生成一个固定 i 和所有 j 的 `(i,j)` 数对 list；把每个 list 都 append 到一起，最后 filter
+
+```scheme
+(accumulate ;number[][] => number[], flatmap!
+ append
+ nil
+ (map (lambda (i) ;这步map: number[] => number[][]
+        (map (lambda (j) (list i j)) ;这步map：number[] => number[]
+             (enumerate-interval 1 (- i 1))))
+      (enumerate-interval 1 n)))
+;一些实用工具
+(define (flatmap proc seq)
+  (accumulate append nil (map proc seq)))
+```
+
+这里很重要的范式是 **nested mappings**，通过 map 的嵌套达到嵌套循环的效果（理解时可以先将外层固定理解内层）。配合 `flatmap` 使用防止最后结果的 list 嵌套

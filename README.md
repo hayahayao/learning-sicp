@@ -45,4 +45,4 @@
 - 2.2 Hierarchical Data and the Closure Property
   - 2.2.1 Representing Sequences ([ex2.17](./ch2/2-17.scm), [ex2.18](./ch2/2-18.scm), [ex2.19](./ch2/2-19.scm), [ex2.20](./ch2/2-20.scm), [ex2.21](./ch2/2-21.scm), [ex2.22](./ch2/2-22.scm), [ex2.23](./ch2/2-23.scm))
   - 2.2.2 Hierarchical Structures ([ex2.24](./ch2/2-24.scm), [ex2.25](./ch2/2-25.scm), [ex2.26](./ch2/2-26.scm), [ex2.27](./ch2/2-27.scm), [ex2.28](./ch2/2-28.scm), [ex2.29](./ch2/2-29.scm), [ex2.30](./ch2/2-30.scm), [ex2.31](./ch2/2-31.scm), [ex2.32](./ch2/2-32.scm))
-  - 2.2.3 Sequences as Conventional Interfaces ([ex2.33](./ch2/2-33.scm), [ex2.34](./ch2/2-34.scm), [ex2.35](./ch2/2-35.scm), [ex2.36](./ch2/2-36.scm), [ex2.37](./ch2/2-37.scm), [ex2.38](./ch2/2-38.scm), [ex2.39](./ch2/2-39.scm))
+  - 2.2.3 Sequences as Conventional Interfaces ([ex2.33](./ch2/2-33.scm), [ex2.34](./ch2/2-34.scm), [ex2.35](./ch2/2-35.scm), [ex2.36](./ch2/2-36.scm), [ex2.37](./ch2/2-37.scm), [ex2.38](./ch2/2-38.scm), [ex2.39](./ch2/2-39.scm), [ex2.40](./ch2/2-40.scm), [ex2.41](./ch2/2-41.scm))
