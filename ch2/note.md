@@ -253,3 +253,34 @@ we can define operation **map**!
 ```
 
 这里很重要的范式是 **nested mappings**，通过 map 的嵌套达到嵌套循环的效果（理解时可以先将外层固定理解内层）。配合 `flatmap` 使用防止最后结果的 list 嵌套
+
+### 2.2.4 Example: A Picture Language
+
+> the importance of describing a language:
+> - primitives
+> - means of combination
+> - means of abstraction
+
+这一节定义了一个简单的语言：
+- 唯一元素：painter（画出一幅平行四边形的画）e.g.`wave`, `rogers`
+- 组合：把给定的 painters 组合成新的 painters（满足 closure） e.g.`besides`, `below`, `flip-vert`, `flip-horiz`
+- 抽象：函数作为另一个函数的参数
+
+下面讨论怎么实现 painter 和它的各种组合操作
+
+- 先定义 frame（可以理解为画框）：由三个向量组成，分别表示原点到起点，以及由起点开始的两条边向量
+- 然后给出将一个原点坐标系的向量转化到画框起点坐标系的方法 `frame-coord-map`。
+
+```scheme
+(define (frame-coord-map frame)
+  (lambda (v)
+    (add-vect
+     (origin-frame frame)
+     (add-vect 
+      (scale-vect (xcor-vect v)
+                  (edge1-frame frame))
+      (scale-vect (ycor-vect v)
+                  (edge2-frame frame))))))
+```
+
+从而我们可以将 painter 表示为，给定一个画框，将一幅画移动缩放到画框中
