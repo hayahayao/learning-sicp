@@ -283,4 +283,19 @@ we can define operation **map**!
                   (edge2-frame frame))))))
 ```
 
-从而我们可以将 painter 表示为，给定一个画框，将一幅画移动缩放到画框中
+从而我们可以将 painter 表示为，给定一个画框，将一幅画移动缩放到画框中（调用 `frame-coord-map` 方法，相当于将原点坐标系的画（一堆向量）转化到画框坐标系中）
+
+painter 上的操作：改变画框的位置，然后在新画框中调用原有的 painter。这些操作无需知道 painter 是怎么运行的，只需要改变原有的 frame。这个过程可以统一抽象成下面的方法：
+
+```scheme
+(define (transform-painter 
+         painter origin corner1 corner2) ;origin表示新画框的原点，corner1/2 分别表示其两条边的终点
+  (lambda (frame) ;返回一个接受frame（旧画框）的函数，把旧画框转化为新画框然后调用painter
+    (let ((m (frame-coord-map frame)))
+      (let ((new-origin (m origin)))
+        (painter (make-frame new-origin ;新的frame
+                  (sub-vect (m corner1) 
+                            new-origin)
+                  (sub-vect (m corner2)
+                            new-origin)))))))
+```
