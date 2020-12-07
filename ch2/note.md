@@ -299,3 +299,19 @@ painter 上的操作：改变画框的位置，然后在新画框中调用原有
                   (sub-vect (m corner2)
                             new-origin)))))))
 ```
+
+从而各种操作都可以定义成 transform-painter
+
+```scheme
+;垂直翻转 也就是变换画框的坐标系
+(define (flip-vert painter)
+  (transform-painter
+   painter
+   (make-vect 0.0 1.0)   ;new origin
+   (make-vect 1.0 1.0)   ;new end of edge1
+   (make-vect 0.0 0.0))) ;new end of edge2
+```
+
+**stratified design**：分层设计，每层以下层提供的原语组合起来构造新的部分，构造出的结果成为对上层提供的原语。每一层所用的语言都有与该层次的细节相适应的基本要素、组合、抽象。
+
+分层设计提高了程序的鲁棒性，即一个小的需求变动只会对应改动程序的一小部分
