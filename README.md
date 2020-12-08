@@ -47,3 +47,5 @@
   - 2.2.2 Hierarchical Structures ([ex2.24](./ch2/2-24.scm), [ex2.25](./ch2/2-25.scm), [ex2.26](./ch2/2-26.scm), [ex2.27](./ch2/2-27.scm), [ex2.28](./ch2/2-28.scm), [ex2.29](./ch2/2-29.scm), [ex2.30](./ch2/2-30.scm), [ex2.31](./ch2/2-31.scm), [ex2.32](./ch2/2-32.scm))
   - 2.2.3 Sequences as Conventional Interfaces ([ex2.33](./ch2/2-33.scm), [ex2.34](./ch2/2-34.scm), [ex2.35](./ch2/2-35.scm), [ex2.36](./ch2/2-36.scm), [ex2.37](./ch2/2-37.scm), [ex2.38](./ch2/2-38.scm), [ex2.39](./ch2/2-39.scm), [ex2.40](./ch2/2-40.scm), [ex2.41](./ch2/2-41.scm), [ex2.42](./ch2/2-42.scm), [ex2.43](./ch2/2-43.scm))
   - 2.2.4 Example: A Picture Language ([ex2.44](./ch2/2-44.scm), [ex2.45](./ch2/2-45.scm), [ex2.46](./ch2/2-46.scm), [ex2.47](./ch2/2-47.scm), [ex2.48](./ch2/2-48.scm), [ex2.50](./ch2/2-50.scm), [ex2.51](./ch2/2-51.scm))
+- 2.3 Symbolic Data
+  - 2.3.1 Quotation([ex2.53](./ch2/2-53.scm), [ex2.54](./ch2/2-54.scm), [ex2.55](./ch2/2-55.scm))

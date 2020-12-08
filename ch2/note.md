@@ -315,3 +315,35 @@ painter 上的操作：改变画框的位置，然后在新画框中调用原有
 **stratified design**：分层设计，每层以下层提供的原语组合起来构造新的部分，构造出的结果成为对上层提供的原语。每一层所用的语言都有与该层次的细节相适应的基本要素、组合、抽象。
 
 分层设计提高了程序的鲁棒性，即一个小的需求变动只会对应改动程序的一小部分
+
+## 2.3 Symbolic Data
+
+### 2.3.1 Quotation
+
+通过在对象前加上一个单引号 `'` 来表示引用这个对象
+
+```scheme
+(define a 1)
+(define b 2)
+
+(list a b) ;(1 2)
+(list 'a 'b) ;(a b)
+(list 'a b) ;(a 2)
+
+(car '(a b c)) ;a
+(cdr '(a b c)) ;(b c)
+```
+
+```scheme
+(define (memq item x)
+  (cond ((null? x) false)
+        ((eq? item (car x)) x)
+        (else (memq item (cdr x)))))
+
+(memq 'apple '(pear banana prune)) ;false
+(memq 'apple '(x (apple sauce) y apple pear)) ;(apple pear)
+```
+
+### 2.3.2 Example: Symbolic Differentiation
+
+Symbolic Differentiation：符号求导，例如给出 ax^2+bx+c 和 x（要求对 x 求导），得出 2ax+b
